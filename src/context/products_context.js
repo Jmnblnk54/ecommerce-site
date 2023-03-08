@@ -1,96 +1,80 @@
-import React, { useEffect, useContext, useReducer } from "react";
-import reducer from "../reducers/filter_reducer";
+import axios from "axios";
+import React, { useContext, useEffect, useReducer } from "react";
+import reducer from "../reducers/products_reducer";
+import { products_url as url } from "../utils/constants";
 import {
-  LOAD_PRODUCTS,
-  SET_GRIDVIEW,
-  SET_LISTVIEW,
-  UPDATE_SORT,
-  SORT_PRODUCTS,
-  UPDATE_FILTERS,
-  FILTER_PRODUCTS,
-  CLEAR_FILTERS,
+  SIDEBAR_OPEN,
+  SIDEBAR_CLOSE,
+  GET_PRODUCTS_BEGIN,
+  GET_PRODUCTS_SUCCESS,
+  GET_PRODUCTS_ERROR,
+  GET_SINGLE_PRODUCT_BEGIN,
+  GET_SINGLE_PRODUCT_SUCCESS,
+  GET_SINGLE_PRODUCT_ERROR,
 } from "../actions";
-import { useProductsContext } from "./products_context";
 
 const initialState = {
-  filtered_products: [],
-  all_products: [],
-  grid_view: true,
-  sort: "price-lowest",
-  filters: {
-    text: "",
-    company: "all",
-    category: "all",
-    color: "all",
-    min_price: 0,
-    max_price: 0,
-    price: 0,
-    shipping: false,
-  },
+  isSidebarOpen: false,
+  products_loading: false,
+  products_error: false,
+  products: [],
+  featured_products: [],
+  single_product_loading: false,
+  single_product_error: false,
+  single_product: {},
 };
 
-const FilterContext = React.createContext();
+const ProductsContext = React.createContext();
 
-export const FilterProvider = ({ children }) => {
-  const { products } = useProductsContext();
+export const ProductsProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  useEffect(() => {
-    dispatch({ type: LOAD_PRODUCTS, payload: products });
-  }, [products]);
+
+  const openSidebar = () => {
+    dispatch({ type: SIDEBAR_OPEN });
+  };
+  const closeSidebar = () => {
+    dispatch({ type: SIDEBAR_CLOSE });
+  };
+
+  const fetchProducts = async (url) => {
+    dispatch({ type: GET_PRODUCTS_BEGIN });
+    try {
+      const response = await axios.get(url);
+      const products = response.data;
+      dispatch({ type: GET_PRODUCTS_SUCCESS, payload: products });
+    } catch (error) {
+      dispatch({ type: GET_PRODUCTS_ERROR });
+    }
+  };
+  const fetchSingleProduct = async (url) => {
+    dispatch({ type: GET_SINGLE_PRODUCT_BEGIN });
+    try {
+      const response = await axios.get(url);
+      const singleProduct = response.data;
+      dispatch({ type: GET_SINGLE_PRODUCT_SUCCESS, payload: singleProduct });
+    } catch (error) {
+      dispatch({ type: GET_SINGLE_PRODUCT_ERROR });
+    }
+  };
 
   useEffect(() => {
-    dispatch({ type: FILTER_PRODUCTS });
-    dispatch({ type: SORT_PRODUCTS });
-  }, [state.sort, state.filters]);
-  // functions
-  const setGridView = () => {
-    dispatch({ type: SET_GRIDVIEW });
-  };
-  const setListView = () => {
-    dispatch({ type: SET_LISTVIEW });
-  };
-  const updateSort = (e) => {
-    // just for demonstration;
-    // const name = e.target.name
-    const value = e.target.value;
-    dispatch({ type: UPDATE_SORT, payload: value });
-  };
-  const updateFilters = (e) => {
-    let name = e.target.name;
-    let value = e.target.value;
-    if (name === "category") {
-      value = e.target.textContent;
-    }
-    if (name === "color") {
-      value = e.target.dataset.color;
-    }
-    if (name === "price") {
-      value = Number(value);
-    }
-    if (name === "shipping") {
-      value = e.target.checked;
-    }
-    dispatch({ type: UPDATE_FILTERS, payload: { name, value } });
-  };
-  const clearFilters = () => {
-    dispatch({ type: CLEAR_FILTERS });
-  };
+    fetchProducts(url);
+  }, []);
+
   return (
-    <FilterContext.Provider
+    <ProductsContext.Provider
       value={{
         ...state,
-        setGridView,
-        setListView,
-        updateSort,
-        updateFilters,
-        clearFilters,
+        openSidebar,
+        closeSidebar,
+        fetchSingleProduct,
       }}
     >
       {children}
-    </FilterContext.Provider>
+    </ProductsContext.Provider>
   );
 };
 // make sure use
-export const useFilterContext = () => {
-  return useContext(FilterContext);
+export const useProductsContext = () => {
+  return useContext(ProductsContext);
 };
