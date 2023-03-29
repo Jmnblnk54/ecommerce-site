@@ -1,29 +1,28 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import heroBcg from "../assets/hero-bcg.jpeg";
-import heroBcg2 from "../assets/hero-bcg-2.jpeg";
+import crafts from "../assets/crafts.jpg";
+import knitting from "../assets/knitting.jpg";
 
 const Hero = () => {
   return (
     <Wrapper className="section-center">
       <article className="content">
         <h1>
-          design your <br />
-          comfort zone
+          Take a piece of Pinellas County <br />
+          home with you
         </h1>
         <p>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iusto, at
-          sed omnis corporis doloremque possimus velit! Repudiandae nisi odit,
-          aperiam odio ducimus, obcaecati libero et quia tempora excepturi quis
-          alias?
+          Pinellas County is home to nearly 1 million people, many of whom are exremely talented in their arts, crafts,
+          and baking skills. Take a look around this shop to see which items will make your life in the county with the
+          best beaches even better.
         </p>
         <Link to="/products" className="btn hero-btn">
           shop now
         </Link>
       </article>
       <article className="img-container">
-        <img src={heroBcg} alt="nice table" className="main-img" />
-        <img src={heroBcg2} alt="person working" className="accent-img" />
+        <img src={crafts} alt="nice table" className="main-img" />
+        <img src={knitting} alt="knitting yarn" className="accent-img" />
       </article>
     </Wrapper>
   );

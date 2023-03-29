@@ -1,13 +1,13 @@
 import styled from "styled-components";
 import { PageHero } from "../components";
-import aboutImg from "../assets/hero-bcg.jpeg";
+import crafts from "../assets/crafts.jpg";
 
 const AboutPage = () => {
   return (
     <main>
       <PageHero title="about" />
       <Wrapper className="page section section-center">
-        <img src={aboutImg} alt="nice desk" />
+        <img src={crafts} alt="various handmade crafts" />
         <article>
           <div className="title">
             <h2>our story</h2>

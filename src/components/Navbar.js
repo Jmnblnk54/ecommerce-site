@@ -11,8 +11,8 @@ const Nav = () => {
   const { myUser } = useUserContext();
   return (
     <NavContainer>
-      <div className="nav-center">
-        <div className="nav-header">
+      <div className="nav-center pt-5">
+        <div className="nav-header pt-5">
           <Link to="/">
             <img src={logo} alt="comfy sloth" />
           </Link>
@@ -52,6 +52,8 @@ const NavContainer = styled.nav`
     max-width: var(--max-width);
   }
   .nav-header {
+    margin-top: 10px;
+    padding-top: 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;

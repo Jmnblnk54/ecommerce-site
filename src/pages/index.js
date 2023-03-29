@@ -1,4 +1,4 @@
-import Home from "./HomePage";
+import HomePage from "./HomePage";
 import Products from "./ProductsPage";
 import SingleProduct from "./SingleProductPage";
 import About from "./About";
@@ -8,7 +8,7 @@ import Checkout from "./CheckoutPage";
 import PrivateRoute from "./PrivateRoute";
 import AuthWrapper from "./AuthWrapper";
 export {
-  Home,
+  HomePage,
   SingleProduct,
   Cart,
   About,
